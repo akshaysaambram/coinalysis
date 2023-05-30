@@ -18,7 +18,7 @@
     <div class="container">
         <header class="d-flex justify-content-space-between align-items-center">
             <h1 class="my-3">Portfolio</h1>
-            <a class="btn btn-outline-primary ms-auto" href="">Transaction history</a>
+            <a class="btn btn-outline-primary ms-auto" href="{% url 'transactions' %}">Transaction history</a>
         </header>
 
         <div class="modal fade" id="sellmodel">
@@ -27,7 +27,7 @@
             
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Buy {{ info.name }}</h4>
+                        <h4 class="modal-title">Sell</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
             
@@ -91,7 +91,7 @@
             <table class="table table-hover text-center">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">Order ID</th>
                         <th scope="col">Coin</th>
                         <th scope="col">Coin Symbol</th>
                         <th scope="col">Quantity</th>
@@ -128,7 +128,7 @@
                                                     $ {{ current_price|subtract:order.bought_price|multiply:order.quantity|floatformat:6 }}
                                                 </span>
                                             {% endif %}
-                                                <button id="sell-btn" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#sellmodel"
+                                                <button id="sell-btn" class="btn btn-outline-danger ms-auto" data-bs-toggle="modal" data-bs-target="#sellmodel"
                                                     data-order-id="{{ order.id }}"
                                                     data-selling-price="{{ current_price }}"
                                                     data-profit-loss="{{ current_price|subtract:order.bought_price|multiply:order.quantity|floatformat:6 }}"
@@ -162,8 +162,6 @@
                 form.elements['order-id'].value = orderId;
                 form.elements['selling-price'].value = sellingPrice;
                 form.elements['profit-or-loss'].value = profitLoss;
-
-                // You can use the parameters to perform other operations or make additional requests to fetch more data for the modal
             });
         });
 

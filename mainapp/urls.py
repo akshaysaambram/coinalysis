@@ -7,4 +7,5 @@ urlpatterns = [
     path('coins/', views.coins, name='coins'),
     path('coins/<str:pk>/', views.coin, name='coin'),
     path('portfolio/', views.portfolio, name='portfolio'),
+    path('transactions/', views.transactions, name='transactions'),
 ]

@@ -3,7 +3,7 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 
-from .models import Order
+from .models import Order, Transaction
 from .forms import BuyForm
 from django.shortcuts import get_object_or_404, render, redirect
 
@@ -108,20 +108,20 @@ def portfolio(request):
         selling_price = float(request.POST.get('selling-price'))
         profit_or_loss = float(request.POST.get('profit-or-loss'))
 
-        # transaction = Transaction.objects.create(
-        #     coin=order.coin,
-        #     symbol=order.symbol,
-        #     bought_price=order.bought_price,
-        #     quantity=order.quantity,
-        #     bought_at=order.bought_at,
-        #     selling_price=selling_price,
-        #     profit_or_loss=profit_or_loss,
-        #     transaction_date=datetime.now(),
-        #     user=request.user,
-        # )
+        transaction = Transaction.objects.create(
+            coin=order.coin,
+            symbol=order.symbol,
+            bought_price=order.bought_price,
+            quantity=order.quantity,
+            bought_at=order.bought_at,
+            selling_price=selling_price,
+            profit_or_loss=profit_or_loss,
+            transaction_date=datetime.now(),
+            user=request.user,
+        )
         order.delete()
         
-        return redirect('portfolio')
+        return redirect('transactions')
     else:
         pass
 
@@ -134,4 +134,14 @@ def portfolio(request):
     }
 
     return render(request, 'mainapp/portfolio.html', context)
+
+
+def transactions(request):
+    trans = Transaction.objects.all()
+
+    context = {
+        'trans': trans,
+    }
+
+    return render(request, 'mainapp/transactions.html', context)
 

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <header class="d-flex justify-content-space-between align-items-center">
+            <h1 class="my-3">Transaction history</h1>
+            <a class="btn btn-outline-primary ms-auto" href="{% url 'portfolio' %}">Portfolio</a>
+        </header>
+
+        <main>
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">Tran. ID</th>
+                        <th scope="col">Coin</th>
+                        <th scope="col">Symbol</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Bought Price</th>
+                        <th scope="col">Bought At</th>
+                        <th scope="col">Selling Price</th>
+                        <th scope="col">Selled At</th>
+                        <th scope="col">Profit/Loss</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tran in trans %}
+                        <tr>
+                            <th scope="col">{{ tran.id }}</th>
+                            <td>{{ tran.coin }}</td>
+                            <td>{{ tran.symbol }}</td>
+                            <td>{{ tran.quantity }}</td>
+                            <td>{{ tran.bought_price|floatformat:6 }}</td>
+                            <td>{{ tran.bought_at|date:"H:i, F d, Y" }}</td>
+                            <td>{{ tran.selling_price|floatformat:6 }}</td>
+                            <td>{{ tran.transaction_date|date:"H:i, F d, Y" }}</td>
+                            <td>
+                                {% if tran.profit_or_loss < 0 %}
+                                    <span class="text-danger">{{ tran.profit_or_loss|floatformat:6 }}</span>
+                                {% else %}
+                                    <span class="text-success">{{ tran.profit_or_loss|floatformat:6 }}</span>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </div>
+{% endblock content %}
