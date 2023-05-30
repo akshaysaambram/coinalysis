@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <style>
+        .container {
+            display: grid;
+            place-items: center;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: calc(100vh - 6rem);
+
+            gap: 2rem;
+        }
+
+        .card-body {
+            text-align: center;
+            padding: 2.6rem 2.2rem;
+        }
+
+        .card-body img {
+            width: 12rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-body a {
+            color:rgba(0, 0, 0);
+            text-decoration: none;
+        }
+
+        .card-body a:hover {
+            color: blue;
+        }
+
+        .card-body h1 {
+            font-size: 3rem;
+        }
+
+        .card-body h3 {
+            color: rgba(0, 0, 0, .5);
+        }
+
+    </style>
+{% endblock style %}
+
+{% block content %}
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <img src="{% static 'mainapp/bitcoin.png' %}" alt="">
+                <a href="{% url 'coin' 'bitcoin' %}"><h1>Bitcoin</h1></a>
+                <h3>BTC</h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <img src="{% static 'mainapp/etherum.png' %}" alt="">
+                <a href="{% url 'coin' 'etherum' %}"><h1>Etherum</h1></a>
+                <h3>ETH</h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <img src="{% static 'mainapp/xrp.png' %}" alt="">
+                <a href="{% url 'coin' 'xrp' %}"><h1>XRP</h1></a>
+                <h3>XRP</h3>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <img src="{% static 'mainapp/dogecoin.png' %}" alt="">
+                <a href="{% url 'coin' 'dogecoin' %}"><h1>Doge Coin</h1></a>
+                <h3>DOGE</h3>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

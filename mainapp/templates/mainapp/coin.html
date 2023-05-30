@@ -1,0 +1,767 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <style>
+        .coin-header {
+            display: flex;
+            align-items: center;
+
+            gap: 2rem;
+            margin: 3rem 0 2rem 0;
+        }
+
+        .coin-header img {
+            width: 3rem;
+        }
+
+        .coin-header h3 {
+            margin: 0;
+
+        }
+
+        .price-section {
+            display: flex;
+            align-items: center;
+
+            gap: 2rem;
+        }
+
+        .price-section h1, 
+        .price-section div h4 {
+            margin: 0;
+        }
+
+        .price-section div {
+            display: flex;
+            align-items: center;
+
+            gap: 1.4rem;
+        }
+
+        .description .lead {
+            width: 90%;
+            margin: auto;
+        }
+
+        .graph {
+            width: 80%;
+            margin: 2rem auto;
+            padding: 1.6rem 2.4rem;
+            border: 2px solid rgba(0, 0, 0, .5);
+            border-radius: 10px;
+        }
+
+        .stock-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            width: 90%;
+            margin: 3rem auto;
+
+            gap: 3rem;
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+    <div class="container">
+        <header class="coin-header">
+            <img src="{% static img_path %}" alt="">
+            <h3>{{ info.name }} {{ info.currency }} ({{ info.symbol }})</h3>
+        </header>
+        
+        <main class="coin-main">
+            <div class="price-section">
+                <h1>$ {{ price|floatformat:6 }}</h1>
+                <div>
+                    {% if diff < 0 %}
+                        <h4 class="text-danger">{{ diff|floatformat:6 }} $</h4>
+                    {% else %}
+                        <h4 class="text-success">{{ diff|floatformat:6 }} $</h4>
+                    {% endif %}
+                    {% if diff_percent < 0 %}
+                        <h4 class="text-danger">({{ diff_percent|floatformat:6 }}) %</h4>
+                    {% else %}
+                        <h4 class="text-success">({{ diff_percent|floatformat:6 }}) %</h4>
+                    {% endif %}
+                </div>
+                <button class="btn btn-success ms-auto" data-bs-toggle="modal" data-bs-target="#buymodel">Buy {{ info.name }}</button>
+            </div>
+
+            <div class="modal fade" id="buymodel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Buy {{ info.name }}</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form id="buyform" method="POST">
+                                {% csrf_token %}
+                                {{ form.quantity }}
+                            </form>
+                        </div>
+                
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" form="buyform">Buy</button>
+                            <!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{ form.errors }}
+
+            <div class="description mt-5">
+                <h3 class="mb-3">Description</h3>
+                <hr>
+                <p class="lead mt-5">{{ info.description }}</p>
+            </div>
+
+            <h3 class="mt-5 mb-3">Summary</h3>
+            <hr>
+            <div class="stock-data">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Previous Close</td>
+                            <td class="text-end fw-bold">{{ info.previousClose|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Day Low</td>
+                            <td class="text-end fw-bold">{{ info.dayLow|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>52 Week Low</td>
+                            <td class="text-end fw-bold">{{ info.fiftyTwoWeekLow|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Volume</td>
+                            <td class="text-end fw-bold">{{ info.volume }}</td>
+                        </tr>
+                        <tr>
+                            <td>Start Date</td>
+                            <td class="text-end fw-bold">{{ info.startDate }}</td>
+                        </tr>
+                        <tr>
+                            <td>50-Day Average</td>
+                            <td class="text-end fw-bold">{{ info.fiftyDayAverage|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Volume (24hr)</td>
+                            <td class="text-end fw-bold">{{ info.volume24Hr }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Open</td>
+                            <td class="text-end fw-bold">{{ info.open|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Day High</td>
+                            <td class="text-end fw-bold">{{ info.dayHigh|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>52 Week High</td>
+                            <td class="text-end fw-bold">{{ info.fiftyTwoWeekHigh|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Market Cap</td>
+                            <td class="text-end fw-bold">{{ info.marketCap }}</td>
+                        </tr>
+                        <tr>
+                            <td>Circulating Supply</td>
+                            <td class="text-end fw-bold">{{ info.circulatingSupply }}</td>
+                        </tr>
+                        <tr>
+                            <td>200-Day Average</td>
+                            <td class="text-end fw-bold">{{ info.twoHundredDayAverage|floatformat:6 }}</td>
+                        </tr>
+                        <tr>
+                            <td>Volume (24hr) All Currencies</td>
+                            <td class="text-end fw-bold">{{ info.volumeAllCurrencies }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="my-3">Graph</h3>
+            <hr class="mb-3">
+            <div id="graph" class="graph">
+                <h3 class="my-3">{{ info.fromCurrency }} Price with 100 Day Exponential Moving Average (EMA)</h3>
+                <div class="btns mt-2 mb-3">
+                    <button class="btn btn-outline-primary" onclick="fivedays()">5 Days</button>
+                    <button class="btn btn-outline-primary" onclick="onemonth()">1 Month</button>
+                    <button class="btn btn-outline-primary" onclick="sixmonths()">6 Months</button>
+                    <button class="btn btn-outline-primary" onclick="oneyear()">1 Year</button>
+                </div>
+                <canvas id="chart"></canvas>
+            </div>
+
+            <div id="graph" class="graph">
+                <h3 class="my-3">{{ info.fromCurrency }} Price with Moving Average Convergence/Divergence (MACD)</h3>
+                <div class="btns mt-2 mb-3">
+                    <button class="btn btn-outline-primary" onclick="macdfivedays()">5 Days</button>
+                    <button class="btn btn-outline-primary" onclick="macdonemonth()">1 Month</button>
+                    <button class="btn btn-outline-primary" onclick="macdsixmonths()">6 Months</button>
+                    <button class="btn btn-outline-primary" onclick="macdoneyear()">1 Year</button>
+                </div>
+                <canvas id="macd"></canvas>
+            </div>
+
+            <h3 class="my-3">Analysis</h3>
+            <hr class="mb-3">
+            <div>
+
+            </div>
+        </main>
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <script>
+        const canvas = document.querySelector('#chart')
+        const ctx = canvas.getContext("2d");
+        const existingChart = Chart.getChart(canvas);
+
+        const df = JSON.parse('{{ json_data|safe }}');
+        const macd = JSON.parse('{{ macd_data|safe }}');
+
+        const labels = df.map(function(record) {
+            return record['Date'];
+        });
+
+        const values = df.map(function(record) {
+            return record['Close'];
+        });
+
+        const ema = df.map(function(record) {
+            return record['EMA'];
+        });
+
+        const dates = macd.map(function(record) {
+            return record['Date'];
+        });
+
+        const macdline = macd.map(function(record) {
+            return record['MACD Line'];
+        });
+
+        const signalline = macd.map(function(record) {
+            return record['Signal Line'];
+        });
+
+        function fivedays() {
+            const existingChart = Chart.getChart(canvas);
+
+            if (existingChart) {
+                existingChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const ctx = canvas.getContext("2d");
+
+            const chart = new Chart(ctx, {
+                type: 'line',  
+                data: {
+                    labels: labels.slice(-6, -1),
+                    datasets: [
+                        {
+                            label: '{{ info.fromCurrency }} Price',
+                            data: values.slice(-6, -1),
+                            fill: true,
+                        },
+                        {
+                            label: '100-day EMA',
+                            data: ema.slice(-6, -1),
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return '$ ' + value;
+                                },
+                            },
+                            display: true,
+                            title: {
+                                display: true,
+                                text: '100 Days EMA'
+                            }
+                        },
+                    },
+                },
+            });
+        }
+
+        function onemonth() {
+            const existingChart = Chart.getChart(canvas);
+
+            if (existingChart) {
+                existingChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const ctx = canvas.getContext("2d");
+
+            const chart = new Chart(ctx, {
+                type: 'line',  
+                data: {
+                    labels: labels.slice(-31, -1),
+                    datasets: [
+                        {
+                            label: '{{ info.fromCurrency }} Price',
+                            data: values.slice(-31, -1),
+                            fill: true,
+                        },
+                        {
+                            label: '100-day EMA',
+                            data: ema.slice(-31, -1),
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return '$ ' + value;
+                                },
+                            },
+                            display: true,
+                            title: {
+                                display: true,
+                                text: '100 Days EMA'
+                            }
+                        },
+                    },
+                },
+            });
+        }
+
+        function sixmonths() {
+            const existingChart = Chart.getChart(canvas);
+
+            if (existingChart) {
+                existingChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const ctx = canvas.getContext("2d");
+
+            const chart = new Chart(ctx, {
+                type: 'line',  
+                data: {
+                    labels: labels.slice(-181, -1),
+                    datasets: [
+                        {
+                            label: '{{ info.fromCurrency }} Price',
+                            data: values.slice(-181, -1),
+                            fill: true,
+                        },
+                        {
+                            label: '100-day EMA',
+                            data: ema.slice(-181, -1),
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return '$ ' + value;
+                                },
+                            },
+                            display: true,
+                            title: {
+                                display: true,
+                                text: '100 Days EMA'
+                            }
+                        },
+                    },
+                },
+            });
+        }
+
+        function oneyear() {
+            const existingChart = Chart.getChart(canvas);
+
+            if (existingChart) {
+                existingChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const ctx = canvas.getContext("2d");
+
+            const chart = new Chart(ctx, {
+                type: 'line',  
+                data: {
+                    labels: labels.slice(-366, -1),
+                    datasets: [
+                        {
+                            label: '{{ info.fromCurrency }} Price',
+                            data: values.slice(-366, -1),
+                            fill: true,
+                        },
+                        {
+                            label: '100-day EMA',
+                            data: ema.slice(-366, -1),
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return '$ ' + value;
+                                },
+                            },
+                            display: true,
+                            title: {
+                                display: true,
+                                text: '100 Days EMA'
+                            }
+                        },
+                    },
+                },
+            });
+        }
+
+        const chart = new Chart(ctx, {
+                type: 'line',  
+                data: {
+                    labels: labels.slice(-31, -1),
+                    datasets: [
+                        {
+                            label: '{{ info.fromCurrency }} Price',
+                            data: values.slice(-31, -1),
+                            fill: true,
+                        },
+                        {
+                            label: '100-day EMA',
+                            data: ema.slice(-31, -1),
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function(value) {
+                                    return '$ ' + value;
+                                },
+                            },
+                            display: true,
+                            title: {
+                                display: true,
+                                text: '100 Days EMA'
+                            }
+                        },
+                    },
+                },
+            });
+
+        const macdcanvas = document.querySelector("#macd");
+        const macdctx = macdcanvas.getContext("2d");
+        const existingMacdChart = Chart.getChart(macdcanvas);
+
+        const macdchart = new Chart(macdctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'MACD Line',
+                        data: macdline,
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                    },
+                    {
+                        type: 'line',
+                        label: 'Signal Line',
+                        data: signalline,
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    },
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'MACD'
+                        }
+                    }
+                }
+            }
+        });
+
+        function macdfivedays() {
+            const existingMacdChart = Chart.getChart(macdcanvas);
+
+            if (existingMacdChart) {
+                existingMacdChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const macdctx = macdcanvas.getContext("2d");
+
+            const macdchart = new Chart(macdctx, {
+                type: 'line',  
+                data: {
+                labels: dates.slice(-6, -1),
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'MACD Line',
+                        data: macdline.slice(-6, -1),
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                    },
+                    {
+                        type: 'line',
+                        label: 'Signal Line',
+                        data: signalline.slice(-6, -1),
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    },
+                ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'MACD'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function macdonemonth() {
+            const existingMacdChart = Chart.getChart(macdcanvas);
+
+            if (existingMacdChart) {
+                existingMacdChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const macdctx = macdcanvas.getContext("2d");
+
+            const macdchart = new Chart(macdctx, {
+                type: 'line',  
+                data: {
+                labels: dates.slice(-31, -1),
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'MACD Line',
+                        data: macdline.slice(-31, -1),
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                    },
+                    {
+                        type: 'line',
+                        label: 'Signal Line',
+                        data: signalline.slice(-31, -1),
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    },
+                ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'MACD'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function macdsixmonths() {
+            const existingMacdChart = Chart.getChart(macdcanvas);
+
+            if (existingMacdChart) {
+                existingMacdChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const macdctx = macdcanvas.getContext("2d");
+
+            const macdchart = new Chart(macdctx, {
+                type: 'line',  
+                data: {
+                labels: dates.slice(-181, -1),
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'MACD Line',
+                        data: macdline.slice(-181, -1),
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                    },
+                    {
+                        type: 'line',
+                        label: 'Signal Line',
+                        data: signalline.slice(-181, -1),
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    },
+                ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'MACD'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function macdoneyear() {
+            const existingMacdChart = Chart.getChart(macdcanvas);
+
+            if (existingMacdChart) {
+                existingMacdChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            const macdctx = macdcanvas.getContext("2d");
+
+            const macdchart = new Chart(macdctx, {
+                type: 'line',  
+                data: {
+                labels: dates.slice(-366, -1),
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'MACD Line',
+                        data: macdline.slice(-366, -1),
+                        borderColor: 'green',
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                    },
+                    {
+                        type: 'line',
+                        label: 'Signal Line',
+                        data: signalline.slice(-366, -1),
+                        borderColor: 'red',
+                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    },
+                ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'MACD'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock script %}
