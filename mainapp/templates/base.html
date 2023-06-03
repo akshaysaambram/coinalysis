@@ -67,22 +67,41 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="collapsibleNavId">
-                    <ul class="navbar-nav ms-auto my-2 my-md-0 gap-3">
+                    <ul class="navbar-nav me-auto my-2 my-md-0 gap-3">
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}" aria-current="page">Home <span class="visually-hidden">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/coins/' %}active{% endif %}" href="{% url 'coins' %}">Coins</a>
+                            <a class="nav-link {% if '/coins/' in request.path %}active{% endif %}" href="{% url 'coins' %}">Coins</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/portfolio/' %}active{% endif %}" href="{% url 'portfolio' %}">Portfolio</a>
-                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.path == '/portfolio/' or request.path == '/transactions/' %}active{% endif %}" href="{% url 'portfolio' %}">Portfolio</a>
+                            </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">About Us</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contact</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto my-2 my-md-0 gap-3">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">{{ user }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'logout' %}" class="nav-link {% if request.path == '/logout/' %}active{% endif %}">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{% url 'login' %}" class="nav-link {% if request.path == '/login/' %}active{% endif %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link {% if request.path == '/register/' %}active{% endif %}">Register</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

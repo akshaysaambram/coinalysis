@@ -3,10 +3,14 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
 from .models import Order, Transaction
 from .forms import BuyForm
 from django.shortcuts import get_object_or_404, render, redirect
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -89,8 +93,9 @@ def coin(request, pk):
     return render(request, 'mainapp/coin.html', context)
 
 
+@login_required
 def portfolio(request):
-    orders = Order.objects.all()
+    orders = Order.objects.filter(user=request.user)
 
     prices = {}
     total_investment = 0
@@ -136,12 +141,56 @@ def portfolio(request):
     return render(request, 'mainapp/portfolio.html', context)
 
 
+@login_required
 def transactions(request):
-    trans = Transaction.objects.all()
+    trans = Transaction.objects.filter(user=request.user)
+
+    total_investment, total_returns, p_or_l = [0] * 3
+    for tran in trans:
+        total_investment += tran.quantity * tran.bought_price
+        total_returns += tran.quantity * tran.selling_price
+        p_or_l += tran.profit_or_loss
 
     context = {
         'trans': trans,
+        'total_investment': total_investment,
+        'total_returns': total_returns,
+        'p_or_l': p_or_l,
     }
 
     return render(request, 'mainapp/transactions.html', context)
 
+
+@login_required
+def analysis(request, pk):
+
+    from .lstm import start_anaylysis
+
+    coin_names = {
+        'BTC-USD': 'bitcoin',
+        'ETH-USD': 'etherum',
+        'XRP-USD':  'xrp',
+        'DOGE-USD': 'dogecoin',
+    }
+
+    ticker, dates, actual, predicted, p_format = start_anaylysis(pk)
+
+    data = {
+        'Actual Prices': actual.tolist(),
+        'Predicted Prices': predicted.ravel().tolist(),
+    }
+
+    df = pd.DataFrame(data)
+    df['Date'] = dates.strftime('%d-%m-%Y')
+
+    json_data = df.to_json(orient='records', date_format='iso')
+
+    context = {
+        'image_path': f'mainapp/graphs/{coin_names[ticker]}.png',
+        'ticker': ticker,
+        'json_data': json_data,
+        'actual_price': actual.tolist()[-1],
+        'p_format': float(p_format),
+    }
+
+    return render(request, 'mainapp/analysis.html', context)

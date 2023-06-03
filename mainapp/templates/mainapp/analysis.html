@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <style>
+        .graph {
+            margin: 2rem auto;
+            padding: 1.6rem 2.4rem;
+            border: 2px solid rgba(0, 0, 0, .5);
+            border-radius: 10px;
+        }
+
+        .graph h3 {
+            margin: 0;
+        }
+
+        .ylinks {
+            display: grid;
+            place-items: center;
+            grid-template-columns: 1fr 1fr 1fr;
+
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+    <div class="container">
+        <header>
+            <h1 class="my-3">Analysis</h1>
+            <div class="d-flex justify-content-space-between align-items-center">
+                {% if actual_price < p_format %}
+                    <p class="lead fs-3 text-success">Coinalysis Predicted {{ ticker }} tomorrow's price : $ {{ p_format }}</p>
+                {% else %}
+                    <p class="lead fs-3 text-danger">Coinalysis Predicted {{ ticker }} tomorrow's price : $ {{ p_format }}</p>
+                {% endif %}
+                <p class="lead ms-auto fs-3">Current Price: $ {{ actual_price|floatformat:6 }}</p>
+            </div>
+        </header>
+        <main>
+            <div id="graph" class="graph">
+                <h3>Actual vs Predicted Prices of {{ ticker }}</h3>
+            </div>
+            <canvas id="analysis-chart"></canvas>
+            <h3 class="text-center mt-4 mb-2">Matplotlib Graph</h3>
+            <div class="text-center">
+                <img src="{% static image_path %}" alt="">
+            </div>
+
+            <h3 class="mt-4">Recommendations</h3>
+            <p class="lead my-3">We Coinalysis team recommend you not to completely depend on the prediction analysis i.e which may cause errors sometimes. We insist you to gain knowledge through Virtual or Paper Tradings with some strategies or indicator analysis. So, Please feel free to check the YouTube tutorial links by many professional traders. <br><br>Thank you,<br>Coinalysis Team.</p>
+
+            <h4 class="mt-4 my-3">Some Popular Strategy or Indicator YouTube links...</h4>
+            <div class="ylinks">
+                <div class="card  h-100">
+                    <div class="card-body">
+                        <iframe width="100%" height="225" src="https://www.youtube.com/embed/Yj0yEBxwLVw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <p class="lead">Most Effective MACD Strategy for Daytrading Crypto, Forex & Stocks (High Winrate Strategy)</p>
+                        <p class="lead">From Data Trader</p>
+                    </div>
+                </div>
+                <div class="card  h-100">
+                    <div class="card-body">
+                        <iframe width="100%" height="225" src="https://www.youtube.com/embed/21b5QF-b0rE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>                        
+                        <p class="lead">How To Identify Trends in Markets (Never Guess Again)</p>
+                        <p class="lead">From Trading Lab</p>
+                    </div>
+                </div>
+                <div class="card  h-100">
+                    <div class="card-body">
+                        <iframe width="100%" height="225" src="https://www.youtube.com/embed/J3fAI3al08Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <p class="lead">Stock Market For Beginners | How To Invest (Step by Step Tutorial)</p>
+                        <p class="lead">From Nate O'Brien</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock content %}
+
+{% block script %}
+    <script>
+        const df = JSON.parse('{{ json_data|safe }}');
+
+        const labels = df.map(function(record) {
+            return record['Date'];
+        });
+
+        const actual = df.map(function(record) {
+            return record['Actual Prices'];
+        });
+
+        const predicted = df.map(function(record) {
+            return record['Predicted Prices'];
+        });
+
+        const canvas = document.querySelector('#analysis-chart');
+        const ctx = canvas.getContext("2d");
+
+        const chart = new Chart(ctx, {
+            type: 'line',  
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Actual Prices',
+                        data: actual,
+                        fill: true,
+                    },
+                    {
+                        label: 'Predicted Prices',
+                        data: predicted,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            callback: function(value) {
+                                return '$ ' + value;
+                            },
+                        },
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Price'
+                        }
+                    },
+                },
+            },
+        });
+    </script>
+{% endblock script %}
+
