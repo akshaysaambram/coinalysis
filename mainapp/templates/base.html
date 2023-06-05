@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>CoinWatcher</title>
+    <title>Coinalysis</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -60,7 +60,7 @@
             <div class="container">
                 <a class="navbar-brand" href="{% url 'index' %}">
                     <img src="{% static 'mainapp/logo.svg' %}" alt="">
-                    <h3>CoinWatcher</h3>
+                    <h3>Coinalysis</h3>
                 </a>
                 <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@
                 <div class="collapse navbar-collapse" id="collapsibleNavId">
                     <ul class="navbar-nav me-auto my-2 my-md-0 gap-3">
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}" aria-current="page">Home <span class="visually-hidden">(current)</span></a>
+                            <a class="nav-link {% if request.path == '' or request.path == '/' or request.path == '/#about' or request.path == '/#contact' %}active{% endif %}" href="{% url 'index' %}" aria-current="page">Home <span class="visually-hidden">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if '/coins/' in request.path %}active{% endif %}" href="{% url 'coins' %}">Coins</a>
@@ -80,10 +80,10 @@
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About Us</a>
+                            <a class="nav-link" href="/#about">About Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link" href="/#contact">Contact</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto my-2 my-md-0 gap-3">
@@ -99,7 +99,7 @@
                                 <a href="{% url 'login' %}" class="nav-link {% if request.path == '/login/' %}active{% endif %}">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a href="" class="nav-link {% if request.path == '/register/' %}active{% endif %}">Register</a>
+                                <a href="{% url 'register' %}" class="nav-link {% if request.path == '/register/' %}active{% endif %}">Register</a>
                             </li>
                         {% endif %}
                     </ul>

@@ -1,5 +1,185 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    <style>
+        .row-hero {
+            height: 90vh;
+        }
+
+        section .section-row {
+            height: 65vh;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+
+            gap: .6rem;
+        }
+
+        #about img.img-thumbnail {
+            width: 300px;
+            height: 350px;
+        }
+
+        .linked-image {
+            width: 175px;
+            height: 75px;
+        }
+    </style>
+{% endblock style %}
 
 {% block content %}
-    Welcome
+    <div class="container">
+        <div class="row row-hero justify-content-around align-items-center">
+            <div class="col-6">
+                <p class="lead">Hello,</p>
+                <h1 class="display-4">Predict Cryptocurrency Prices with Virtual Trading.</h1>
+                <p class="lead fs-4">Experience virtual trading and predict prices with our LSTM machine learning algorithm.</p>
+                <a class="btn btn-dark" href="/#about">View more</a>
+            </div>
+            <div class="col-5">
+                <img class="img-fluid rounded-4" src="{% static 'mainapp/hero.png' %}" alt="Hero PNG">
+            </div>
+        </div>
+
+        <section>
+            <div class="row section-row justify-content-around align-items-center">
+                <div class="col-5">
+                    <img class="img-fluid rounded-4" src="{% static 'mainapp/section1.png' %}" alt="" class="img-fluid">
+                </div>
+                <div class="col-6">
+                    <h2 class="display-5">Experience Virtual Trading.</h2>
+                    <p class="lead fs-4">Test your trading skills with our virtual trading functionality, without risking any real money.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="row section-row justify-content-around align-items-center">
+                <div class="col-6">
+                    <h2 class="display-5">Predict cryptocurrency prices accurately.</h2>
+                    <p class="lead fs-4">Our advanced LSTM machine learning algorithm helps you predict accurate cryptocurrency prices and make informed trading decisions.</p>
+                </div>
+                <div class="col-5">
+                    <img class="img-fluid rounded-4" src="{% static 'mainapp/section2.png' %}" alt="" class="img-fluid">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="row section-row justify-content-around align-items-center">
+                <div class="col-5">
+                    <img class="img-fluid rounded-4" src="{% static 'mainapp/section3.png' %}" alt="" class="img-fluid">
+                </div>
+                <div class="col-6">
+                    <h2 class="display-5">Learn about the market.</h2>
+                    <p class="lead fs-4">Stay up to date with the latest market trends and learn about the cryptocurrency market by using our platform.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12">
+                    <h2 class="display-5 mt-5 mb-3">About Coinalysis</h2>
+                    <hr>
+                    <p class="lead fs-4">Coinalysis combines the power of deep learning and historical data analysis to forecast the prices of various cryptocurrencies. By employing Long Short-Term Memory (LSTM) algorithm, a type of recurrent neural network (RNN), Coinalysis can capture complex patterns and dependencies in cryptocurrency price movements. This advanced predictive model allows users to gain a competitive edge in the volatile world of cryptocurrencies.</p>
+                </div>
+                <div class="col-12">
+                    <h2 class="display-5 mt-4 mb-3">How Coinalysis Works</h2>
+                    <hr>
+                    <ol>
+                        <li class="lead text-muted fs-4"><strong class="text-black">Data Collection:</strong>  Coinalysis collects historical price data from various cryptocurrency exchanges, including Bitcoin, Ethereum, Litecoin, and many more. The application ensures that the data is up-to-date and accurate, enabling precise predictions.</li>
+                        <li class="lead text-muted fs-4"><strong class="text-black">Preprocessing:</strong>  The collected data undergoes a series of preprocessing steps to clean and transform it into a suitable format for the LSTM algorithm. These steps include handling missing values, scaling, and feature engineering.</li>
+                        <li class="lead text-muted fs-4"><strong class="text-black">Model Training:</strong>  Coinalysis leverages LSTM, a deep learning algorithm specifically designed to process sequential data, such as time series. The model is trained on the preprocessed data, enabling it to learn the underlying patterns and correlations between different features.</li>
+                        <li class="lead text-muted fs-4"><strong class="text-black">Prediction: </strong> Once the model is trained, it becomes capable of predicting future cryptocurrency prices based on the historical data. Coinalysis generates accurate and reliable forecasts, providing users with valuable insights into potential price movements.</li>
+                        <li class="lead text-muted fs-4"><strong class="text-black">Visualization:</strong>  Coinalysis presents the predicted prices in an intuitive and visually appealing manner. Users can explore interactive charts and graphs, allowing them to analyze trends and patterns effortlessly. These visualizations help users make informed decisions and devise effective trading strategies.</li>
+                    </ol>
+                </div>
+                <div class="col-12">
+                    <h2 class="display-5 mt-5 mb-3">Our Team</h2>
+                    <hr>
+                    <div class="grid text-center">
+                        <div class="rounded-4 py-4">
+                            <div class="card-body">
+                                <img class="img-thumbnail rounded-5" src="{% static 'mainapp/akshaysaambram.jpg' %}" alt="">
+                                <h4 class="display-6 mt-4">Akshay Saambram</h4>
+                                <a href="https://www.linkedin.com/in/akshaysaambram" target="_blank"><img class="linked-image" src="{% static 'mainapp/linked-image.png' %}" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="rounded-4 py-4">
+                            <div class="card-body">
+                                <img class="img-thumbnail rounded-5" src="{% static 'mainapp/akshaysaambram.jpg' %}" alt="">
+                                <h4 class="display-6 mt-4">Sarthak Ananthula</h4>
+                                <a href=""><img class="linked-image" src="{% static 'mainapp/linked-image.png' %}" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="rounded-4 py-4">
+                            <div class="card-body">
+                                <img class="img-thumbnail rounded-5" src="{% static 'mainapp/akshaysaambram.jpg' %}" alt="">
+                                <h4 class="display-6 mt-4">Narahari Jitta</h4>
+                                <a href=""><img class="linked-image" src="{% static 'mainapp/linked-image.png' %}" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="display-5 mt-4 mb-3">Contact Us</h2>
+                    <hr>
+                    <p class="lead fs-4">Thank you for your interest in Coinalysis! We value your feedback, suggestions, and inquiries. If you have any questions or would like to get in touch with our team, please use the contact information below.</p>
+                </div>
+                <div class="col-12">
+                    <h4 class="fs-3 mt-3 mb-2">General Inquiries</h4>
+                    <p class="lead fs-4">For general inquiries about Coinalysis, our services, or any other non-technical questions, please reach out to us via email or phone:</p>
+                    <ul>
+                        <li>Email(s): <a href="mailto:akshaysaambram@gmail.com">akshaysaambram@gmail.com</a>, <a href="mailto:sarthakananthula@gmail.com">sarthakananthula@gmail.com</a>, <a href="mailto:naraharijitta@gmail.com">naraharijitta@gmail.com</a></li>
+                        <li>Phone: <a href="tel:+91 833 207 1528">+91 833 207 1528</a></li>
+                    </ul>
+                    <p class="lead fs-4">Our team will be happy to assist you and provide any information you may need.</p>
+                </div>
+                <div class="col-12">
+                    <h4 class="fs-3 mt-3 mb-2">Technical Support</h4>
+                    <p class="lead fs-4">If you require technical support or have any issues related to using Coinalysis, our dedicated support team is ready to help. Please contact us via:</p>
+                    <ul>
+                        <li>Email: <a href="mailto:support.team@coinalysis.com">support.team@coinalysis.com</a></li>
+                        <li>Phone: <a href="tel:+91 833 207 1528">+91 833 207 1528</a></li>
+                    </ul>
+                    <p class="lead fs-4">Please provide detailed information about the problem you're experiencing, including any error messages or screenshots, to help us understand and address your concerns effectively.</p>
+                    <p class="lead fs-4">We appreciate your interest and feedback. Our team will do our best to respond to your inquiries promptly. Thank you for choosing Coinalysis!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container-fluid">
+            <div class="container-fluid mt-4 mt-md-0 pt-3 pb-2 px-5">
+                <div class="row text-dark text-center">
+                    <div class="col-12 my-4"><p class="display-6">Coinalysis</p></div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex flex-column flex-grow-1">
+                        <p class="fs-3">Useful links</p>
+                        <p><a class="text-decoration-none text-dark" href="/"><ion-icon class="text-primary me-3" name="home-outline"></ion-icon>Home</a></p>
+                        <p><a class="text-decoration-none text-dark" href="/#about"><ion-icon class="text-primary me-3" name="help-circle-outline"></ion-icon>About</a></p>
+                        <p><a class="text-decoration-none text-dark" href="/#contact"><ion-icon class="text-primary me-3" name="mail-open-outline"></ion-icon>Contact</a></p>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex flex-column flex-grow-1">
+                        <p class="fs-3">Contact</p>
+                        <p><ion-icon class="text-primary me-3" name="home-outline"></ion-icon>Hyderabad, TS, India</p>
+                        <p><a class="text-dark text-decoration-none" href="mailto:support.team@coinalysis.com"><ion-icon class="text-primary me-3" name="mail-outline"></ion-icon>support.team@coinalysis.com</a></p>
+                        <p><a class="text-dark text-decoration-none" href="tel:+91 833 207 1528"><ion-icon class="text-primary me-3" name="call-outline"></ion-icon>+91 833 207 1528</a></p>
+                    </div>
+                </div>
+                <hr class="text-dark">
+                <p class="lead fs-3 text-dark text-center">Copy rights <span class="text-primary">&copy;</span>. All rights are reserved.</p>
+            </div>
+        </div>
+    </footer>
 {% endblock content %}

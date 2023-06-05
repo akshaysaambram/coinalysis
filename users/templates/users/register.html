@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block style %}
+    <style>
+        .container {
+            display: grid;
+            place-items: center;
+            grid-template-rows: calc(100vh - 6rem);
+        }
+
+        .card {
+            width: 75%;
+        }
+
+        #hint_id_password1, #hint_id_username, #hint_id_password2 {
+            display: none;
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+    <div class="container">
+        <div class="card p-3">
+            <div class="card-body">
+                <h2 class="display-6">Register here</h2>
+                <hr>
+                <p class="lead">Join the Coinalysis community and unlock the future of cryptocurrencies. Register now to gain access to advanced predictive analysis and stay ahead of the market trends.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form.username|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form.first_name|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.last_name|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            {{ form.password1|as_crispy_field }}
+                        </div>
+                        <div class="col-6">
+                            {{ form.password2|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <input class="btn btn-success" type="submit" value="Register">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
